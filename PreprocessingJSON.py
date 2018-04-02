@@ -100,7 +100,7 @@ def json_to_txt(file_name):
 		print(list_to_string(text_arr))
 		
 		try:
-			file_name.write(list_to_string(text_arr) + "\n")
+			tweets.write(list_to_string(text_arr) + "\n")
 		except:
 			pass
 
