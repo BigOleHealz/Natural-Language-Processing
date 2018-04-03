@@ -10,6 +10,12 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import PorterStemmer
 import codecs
 
+#######################################################
+####### 				Prefixes               ########
+#######################################################
+
+aps_arr = []
+
 stop_words = set(stopwords.words("english"))	# import most-used words that convey little intent
 
 ps = PorterStemmer()	# So that we can stem words later (if we want)
@@ -48,6 +54,24 @@ def remove_links(array):	# Removes any link starting with "http" or "https"
 
 	return array
 
+def elongate_contractions(array):
+	for i in range(len(array)):
+		if array[i] == "n't":
+			try:
+				print("{}:    {}  {}".format(i, array[i-1], array[i]))
+			except:
+				print("Error:  {}".format(array[i - 1]))
+
+			aps_arr.append(array[i - 1])
+
+def arr_count(array, string):
+	count = 0
+	for i in array:
+		if i == string:
+			count += 0
+
+	return count
+
 def remove_stop_words(array):	# Removes most-used words that don't express much opinion like "and", "the", or "in"
 	filtered_array = [word for word in array if not word in stop_words]
 
@@ -69,16 +93,17 @@ def json_to_txt(file_name):
 	json_file = open("twitter_samples/" + file_name + ".json", "r")
 	tweets = codecs.open("twitter_samples/" + file_name + ".txt", "w", "utf-8")
 
-	for line in json_file:
+	for line in json_file: 
 		text_arr = [word for word in word_tokenize(json.loads(line)["text"])]	# Tokenize each string of words in the "text" field of the json and put the into an array (list)
 
-		if need_to_be_altered(text_arr):	# Removes "@blahblah" and links if need-be
-			text_arr = alter(text_arr)
-		text_arr = remove_stop_words(text_arr)	# Removes stop words
-		# text_arr = stem_words(text_arr)	# Stems all words in the array
+		if need_to_be_altered(text_arr): text_arr = alter(text_arr)	# Removes "@blahblah" and links if need-be
+			
 
-		print(list_to_string(text_arr))
+		elongate_contractions(text_arr)
 		
+		text_arr = remove_stop_words(text_arr)	# Removes stop words
+		# text_arr = stem_words(text_arr)	# Stems all words in the array		
+
 		try:
 			tweets.write(list_to_string(text_arr) + "\n")	# Cast the list to a string and print it in the "write to" file
 		except:

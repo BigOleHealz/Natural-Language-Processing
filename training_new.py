@@ -42,9 +42,8 @@ short_neg = open("twitter_samples/negative_tweets.txt","r", encoding='utf-8', er
 documents = []
 all_words = []
 
-
 documents = []
-allowed_word_types = ["J"]
+allowed_word_types = ["J", "R", "V", "N"]
 
 for p in short_pos.split('\n'):
     documents.append( (p, "pos") )
